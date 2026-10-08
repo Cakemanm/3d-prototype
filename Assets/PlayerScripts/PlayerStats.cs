@@ -15,6 +15,10 @@ public class PlayerStats : MonoBehaviour
     public GameObject deathScreen;
     public float respawnDelay = 1f;
 
+    [Header("Abilities")]
+    public int extraJumps = 1;
+    public bool canDash = true;
+
 
     public int GetMaxHealth() {
         return maxHealth + (vit * 2); // Each point of vitality increases max health by 2
@@ -56,12 +60,13 @@ public class PlayerStats : MonoBehaviour
         // TODO: Add death logic here (e.g., respawn, game over screen, etc.)
         movement.enabled = false; // Disable player movement
         deathScreen.SetActive(true); // Show the death screen
+        GetComponent<CharacterSheet>().SetOpen(false); // Close the character sheet if it's open
         Invoke(nameof(Respawn), respawnDelay); // Respawn after a delay
     }
 
     void Respawn() {
         transform.position = new Vector3(0f, 1f, 0f); // Reset position to a default spawn point (you can change this)
-        controller.enabled = true; // Enable player controls
+        Physics.SyncTransforms(); // Ensure the physics engine is aware of the position change
         movement.enabled = true; // Enable player movement
         deathScreen.SetActive(false); // Hide the death screen
         health = GetMaxHealth(); // Reset health on respawn
@@ -69,5 +74,18 @@ public class PlayerStats : MonoBehaviour
 
     public void AddCoins(int amount) {
         coins += amount;
+    }
+
+    public int vitCost = 1;
+
+    public void BuyVit() {
+        if (coins < vitCost) {
+            Debug.Log("Not enough coins to buy vitality.");
+            return;
+        }
+        coins -= vitCost;
+        vit += 1;
+        health += 2;
+        Debug.Log("Bought vitality. Current vitality: " + vit);
     }
 }
