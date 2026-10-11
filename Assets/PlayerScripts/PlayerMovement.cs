@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         jumpPressed = false; // Reset jumpPressed after processing
 
         //dash
-        if (dashPressed && stats.canDash &&Time.time >= nextDashTime) {
+        if (dashPressed && stats.canDash && Time.time >= nextDashTime) {
             //dash in steering direction if moving, otherwise dash forward
             dashDirection = inputDirection.sqrMagnitude > 0.01 ? inputDirection.normalized : transform.forward; // Dash in the forward direction
             dashTimeLeft = dashDuration;
